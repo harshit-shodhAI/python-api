@@ -11,14 +11,20 @@ DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
 class LLMService:
     def __init__(self, model: Optional[str] = None):
         self.model = model or DEFAULT_MODEL
+        self.api_key_missing = False
         
         if not openai.api_key:
-            raise ValueError(
-                "OpenAI API key not found. Please set the OPENAI_API_KEY environment variable "
-                "in a .env file or directly in your environment."
-            )
+            self.api_key_missing = True
+            print("WARNING: OpenAI API key not found. The service will return mock responses.")
     
     def analyze_grammar(self, text: str) -> Dict[str, Any]:
+        if self.api_key_missing:
+            # Return a mock response if API key is missing
+            return {
+                "errors": [],
+                "grammar_feedback": "API key missing. Please set the OPENAI_API_KEY environment variable."
+            }
+            
         prompt = f"""
         You are a TOEFL grammar expert. Analyze the following text for grammatical errors:
 
@@ -66,6 +72,13 @@ class LLMService:
             }
     
     def analyze_coherence(self, text: str, topic: str) -> Dict[str, Any]:
+        if self.api_key_missing:
+            # Return a mock response if API key is missing
+            return {
+                "coherence_feedback": "API key missing. Please set the OPENAI_API_KEY environment variable.",
+                "score": 0.5
+            }
+            
         prompt = f"""
         You are a TOEFL coherence expert. Analyze the following text for coherence and flow:
 
