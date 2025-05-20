@@ -119,3 +119,4 @@ class LLMService:
                 "coherence_feedback": "Unable to analyze coherence due to an error in processing the response.",
                 "score": 0.5
             }
+

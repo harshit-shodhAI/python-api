@@ -1,4 +1,5 @@
 from typing import Dict, List, Any, Tuple
+import re
 from app.utils import merge_overlapping_errors
 from app.llm_service import LLMService
 
