@@ -5,13 +5,14 @@ import json
 import sys
 import os
 
-if os.path.basename(os.getcwd()) == 'app':
-    sys.path.append(os.path.dirname(os.getcwd()))
-    from grammar_checker import GrammarChecker
-    from coherence_analyzer import CoherenceAnalyzer
-else:
+# Simplified import logic that works both locally and in Docker
+try:
     from app.grammar_checker import GrammarChecker
     from app.coherence_analyzer import CoherenceAnalyzer
+except ImportError:
+    # Fallback for local development
+    from grammar_checker import GrammarChecker
+    from coherence_analyzer import CoherenceAnalyzer
 
 app = FastAPI(
     title="TOEFL Speaking Transcript Analyzer",
